@@ -4,7 +4,9 @@
     "esModuleInterop": true,
     "target": "ES5",
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react",
+    "allowJs": true
   },
   "files": [
     "webpack.config.ts"
