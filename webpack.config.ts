@@ -1,12 +1,12 @@
-import * as path from 'path';
-import * as webpack from 'webpack';
+import path from "path";
+import webpack from "webpack";
 
 const config: webpack.Configuration = {
-  mode: 'production',
-  entry: './src/main.ts',
+  mode: 'development',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.bundle.ts'
+    filename: 'main.bundle.js'
   }
 };
 
