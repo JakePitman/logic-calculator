@@ -3,7 +3,10 @@ import webpack from "webpack";
 
 const config: webpack.Configuration = {
   mode: 'development',
-  entry: './src/index.ts',
+  entry: './src/index.tsx',
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js', '.json' ],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.bundle.js'
@@ -11,7 +14,7 @@ const config: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.ts/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'
