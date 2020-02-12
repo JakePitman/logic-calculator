@@ -1,4 +1,4 @@
-type TruthValue = 1 | 0
+export type TruthValue = 1 | 0
 
 export const evalAnd = (arg1: TruthValue, arg2: TruthValue ): TruthValue => {
   return arg1 && arg2
