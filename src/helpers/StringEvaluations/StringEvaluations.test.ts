@@ -1,7 +1,8 @@
-import {createRowObject} from './StringEvaluations'
+import {createRowObject, resolveVariableAssignments} from './StringEvaluations'
+import {VariableAssignment} from "../../sharedTypes"
 
 describe('createRowObject', () => {
-  test.only('splits string arg into array & sets as originalRow and workingRow properties', () => {
+  test('splits string arg into array & sets as originalRow and workingRow properties', () => {
     const testString = "(a>b)&~(avb)"
     const result = createRowObject(testString)
     expect(result.originalRow).toStrictEqual(["(", "a", ">", "b", ")", "&", "~", "(", "a", "v", "b", ")"])
@@ -36,5 +37,42 @@ describe('createRowObject', () => {
     const result = createRowObject(testString)
     expect(result.originalRow).toStrictEqual(["a", "<>", "b"])
     expect(result.workingRow).toStrictEqual(["a", "<>", "b"])
+  })
+})
+
+describe("resolveVariableAssignments", () => {
+  let rowObject
+  beforeEach(() => {
+    rowObject = {
+      originalRow: ["~", "(", "(", "a", "&", "b", ")", "<>", "p", ")"],
+      workingRow: ["~", "(", "(", "a", "&", "b", ")", "<>", "p", ")"],
+      evaluatedRow: [null, null, null, null, null, null, null, null, null, null]
+    }
+  })
+
+  it("replaces corresponding null in workingRow & evaluatedRow with value assigned to variable in originalRow", () => {
+    const variableAssignment: VariableAssignment = {
+      "a": 1,
+      "b": 0,
+      "p": 1
+    }
+    const result = resolveVariableAssignments(rowObject, variableAssignment)
+    expect(result.workingRow).toStrictEqual(
+      ["~", "(", "(", 1, "&", 0, ")", "<>", 1, ")"]
+    )
+    expect(result.evaluatedRow).toStrictEqual(
+      [null, null, null, 1, null, 0, null, null, 1, null]
+    )
+  })
+
+  it("leaves corresponding index positions unchanged if var is not assigned", () => {
+    const variableAssignment: VariableAssignment = { "p": 1 }
+    const result = resolveVariableAssignments(rowObject, variableAssignment)
+    expect(result.workingRow).toStrictEqual(
+      ["~", "(", "(", "a", "&", "b", ")", "<>", 1, ")"]
+    )
+    expect(result.evaluatedRow).toStrictEqual(
+      [null, null, null, null, null, null, null, null, 1, null]
+    )
   })
 })
