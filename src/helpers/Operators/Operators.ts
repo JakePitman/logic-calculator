@@ -1,4 +1,4 @@
-export type TruthValue = 1 | 0
+import { TruthValue } from "../../sharedTypes"
 
 export const evalAnd = (arg1: TruthValue, arg2: TruthValue ): TruthValue => {
   return arg1 && arg2

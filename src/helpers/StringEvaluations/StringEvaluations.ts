@@ -1,4 +1,4 @@
-import { TruthValue } from "./Operators"
+import { TruthValue } from "../Operators"
 
 type RowObject = {
   originalRow: string[],
