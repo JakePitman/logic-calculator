@@ -1,9 +1,11 @@
 import { TruthValue } from "../../sharedTypes"
 import { permittedChars, VariableAssignment } from "../../sharedTypes"
 
+export type WorkingRow = (string | TruthValue | null)[]
+
 type RowObject = {
   originalRow: string[],
-  workingRow: (string | TruthValue | null)[],
+  workingRow: WorkingRow,
   evaluatedRow: (TruthValue | null)[]
 }
 
@@ -48,4 +50,11 @@ export const resolveVariableAssignments = (rowObject: RowObject, variableAssignm
     }
   })
   return result
+}
+
+export const innermostBrackets = (row: WorkingRow): {opening: number, closing: number} => {
+  const closing = row.findIndex(char => char === ")")
+  const charsLeftOfClosing = row.slice(0, closing)
+  const opening = charsLeftOfClosing.lastIndexOf("(")
+  return {opening, closing}
 }

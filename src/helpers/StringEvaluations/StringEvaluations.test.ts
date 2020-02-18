@@ -1,4 +1,4 @@
-import {createRowObject, resolveVariableAssignments} from './StringEvaluations'
+import {createRowObject, resolveVariableAssignments, innermostBrackets, WorkingRow} from './StringEvaluations'
 import {VariableAssignment} from "../../sharedTypes"
 
 describe('createRowObject', () => {
@@ -74,5 +74,13 @@ describe("resolveVariableAssignments", () => {
     expect(result.evaluatedRow).toStrictEqual(
       [null, null, null, null, null, null, null, null, 1, null]
     )
+  })
+})
+
+describe("innermostBrackets", () => {
+  it("returns the opening & closing index positions of innermost bracket pair", () => {
+    const workingRow: WorkingRow = ["~", "(", "(", "a", "&", "b", ")", "<>", 1, ")"]
+    const result = innermostBrackets(workingRow)
+    expect(result).toStrictEqual({opening: 2, closing: 6})
   })
 })
