@@ -1,4 +1,4 @@
-import {evalNot} from "../Operators"
+import {evalNot, evalOperator} from "../Operators"
 import { TruthValue } from "../../sharedTypes"
 import { permittedChars, permittedOperators, VariableAssignment } from "../../sharedTypes"
 
@@ -74,5 +74,54 @@ export const evaluateNegations = (rowObject: RowObject, innermostBrackets: {open
       workingRow[i + 1] = null
     }
   }
+  return result
+}
+
+export const evaluateInnermostBrackets = (rowObject: RowObject): RowObject => {
+  const { opening, closing } = innermostBrackets(rowObject.workingRow)
+  const result = {...evaluateNegations(rowObject, {opening, closing})}
+  const {workingRow, evaluatedRow} = result
+
+  // get index positions of left operator, operand, right operator
+  const indexes = []
+  let i
+  for (i = opening; i < closing + 1; i++){
+    const currentChar = workingRow[i]
+    if (
+      (typeof currentChar === "number")
+      || (typeof currentChar === "string" && permittedOperators.includes(currentChar))
+      ) {
+      indexes .push(i)
+    }
+  }
+
+  if(indexes.length > 3) { throw Error("Too many characters given in single bracket pair") }
+
+  const leftOperandIndex = indexes[0]
+  const operatorIndex = indexes[1]
+  const rightOperandIndex = indexes[2]
+  const leftOperand = workingRow[indexes[0]]
+  const operator = workingRow[indexes[1]]
+  const rightOperand = workingRow[indexes[2]]
+
+  let operatorResult
+  if((typeof leftOperand !== "string") && (typeof operator === "string") && (typeof rightOperand !== "string")){
+    operatorResult = evalOperator(
+      leftOperand,
+      operator,
+      rightOperand
+    )
+  } else {
+    throw Error("Invalid operator or operand found")
+  }
+
+  workingRow[leftOperandIndex] = null
+  workingRow[rightOperandIndex] = null
+  workingRow[opening] = null
+  workingRow[closing] = null
+
+  workingRow[operatorIndex] = operatorResult
+  evaluatedRow[operatorIndex] = operatorResult
+
   return result
 }

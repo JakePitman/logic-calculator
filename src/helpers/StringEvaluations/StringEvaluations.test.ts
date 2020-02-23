@@ -107,19 +107,28 @@ describe("evaluateInnermostBrackets", () => {
   let rowObject
   beforeEach(() => {
     rowObject = {
-      originalRow: ["~", "(", "(", "a", "&", "b", ")", "<>", "p", ")"],
-      workingRow: ["~", "(", "(", 1, "&", 0, ")", "<>", 1, ")"],
-      evaluatedRow: [null, null, null, 1, null, 0, null, null, 1, null]
+      originalRow: ["(", "(", "a", "&", "~", "b", ")", "<>", "c", ")", ">", "a"],
+      workingRow: ["(", "(", 1, "&", "~", 1, ")", "<>", 0, ")", ">", 1],
+      evaluatedRow: [null, null, 1, null, null, 1, null, null, 0, null, null, 1]
     }
   })
 
   it("updates the null value corresponding to the innermost brackets' operator", () => {
-    const result = evaluateRowObject(rowObject)
-    expect(result.evaluatedRow).toStrictEqual([null, null, null, 1, 0, 0, null, null, 1, null])
+    const result = evaluateInnermostBrackets(rowObject)
+    expect(result.evaluatedRow).toStrictEqual([null, null, 1, 0, 0, 1, null, null, 0, null, null, 1])
   })
 
   it("updates the operator in the innermostbrackets and replaces everything else in the brackets with null in the workingRow", () => {
-    const result = evaluateRowObject(rowObject)
-    expect(result.workingRow).toStrictEqual(["~", "(", null, null, 0, null, null, "<>", 1, ")"])
+    const result = evaluateInnermostBrackets(rowObject)
+    expect(result.workingRow).toStrictEqual(["(", null, null, 0, null, null, null, "<>", 0, ")", ">", 1 ])
+  })
+
+  it("throws an error when innermost brackets are badly formed", () => {
+    const rowObject: RowObject = {
+      originalRow: ["(", "(", "a", "&", "~", "b", "a", ")", "<>", "c", ")", ">", "a"],
+      workingRow: ["(", "(", 1, "&", "~", 1, 1, ")", "<>", 0, ")", ">", 1],
+      evaluatedRow: [null, null, 1, null, null, 1, 1, null, null, 0, null, null, 1]
+    }
+    expect(() => {evaluateInnermostBrackets(rowObject)}).toThrow()
   })
 })
