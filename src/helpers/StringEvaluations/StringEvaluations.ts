@@ -130,3 +130,12 @@ export const evaluateInnermostBrackets = (rowObject: RowObject): RowObject => {
 
   return result
 }
+
+export const evaluateFullProposition = (rowObject: RowObject): RowObject => {
+  if ( rowObject.workingRow[0] === "(" && rowObject.workingRow[rowObject.workingRow.length -1 ] === ")" ) {
+    const withInnerBracketsEvaluated = evaluateInnermostBrackets(rowObject)
+    return evaluateFullProposition(withInnerBracketsEvaluated)
+  } else {
+    return rowObject
+  }
+}
