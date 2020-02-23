@@ -1,9 +1,10 @@
+import {evalNot} from "../Operators"
 import { TruthValue } from "../../sharedTypes"
-import { permittedChars, VariableAssignment } from "../../sharedTypes"
+import { permittedChars, permittedOperators, VariableAssignment } from "../../sharedTypes"
 
 export type WorkingRow = (string | TruthValue | null)[]
 
-type RowObject = {
+export type RowObject = {
   originalRow: string[],
   workingRow: WorkingRow,
   evaluatedRow: (TruthValue | null)[]
@@ -57,4 +58,21 @@ export const innermostBrackets = (row: WorkingRow): {opening: number, closing: n
   const charsLeftOfClosing = row.slice(0, closing)
   const opening = charsLeftOfClosing.lastIndexOf("(")
   return {opening, closing}
+}
+
+// For use in evaluateInnermostBrackets only
+export const evaluateNegations = (rowObject: RowObject, innermostBrackets: {opening: number, closing: number}): RowObject => {
+  const result = {...rowObject}
+  const {workingRow, evaluatedRow} = result
+  const {opening, closing} = innermostBrackets
+  let i
+  for (i = closing; i > (opening - 1); i--) {
+    if (workingRow[i] === "~") {
+      const negationResult = evalNot(evaluatedRow[i + 1])
+      evaluatedRow[i] = negationResult
+      workingRow[i] = negationResult
+      workingRow[i + 1] = null
+    }
+  }
+  return result
 }

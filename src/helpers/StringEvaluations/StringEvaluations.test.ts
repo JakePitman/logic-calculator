@@ -1,4 +1,4 @@
-import {createRowObject, resolveVariableAssignments, innermostBrackets, WorkingRow} from './StringEvaluations'
+import {evaluateNegations, evaluateInnermostBrackets, createRowObject, resolveVariableAssignments, innermostBrackets, WorkingRow, RowObject} from './StringEvaluations'
 import {VariableAssignment} from "../../sharedTypes"
 
 describe('createRowObject', () => {
@@ -82,6 +82,24 @@ describe("innermostBrackets", () => {
     const workingRow: WorkingRow = ["~", "(", "(", "a", "&", "b", ")", "<>", 1, ")"]
     const result = innermostBrackets(workingRow)
     expect(result).toStrictEqual({opening: 2, closing: 6})
+  })
+})
+
+describe("evaluateNegations", () => {
+  const rowObject: RowObject = {
+      originalRow: ["(", "~", "a", "&", "~", "~", "b", ")", "&", "a"],
+      workingRow: ["(", "~", 1, "&", "~", "~", 0, ")", "&", 1],
+      evaluatedRow: [null, null, 1, null, null, null, 0, null, null, 1]
+  }
+
+  it("replaces negation operator with negation of negand in workingRow, and replaces negand with null", () => {
+    const result = evaluateNegations(rowObject, {opening: 0, closing: 7})
+    expect(result.workingRow).toStrictEqual(["(", 0, null, "&", 0, null, null, ")", "&", 1])
+  })
+
+  it("replaces negation operator with negation of negand in evaluatedRow", () => {
+    const result = evaluateNegations(rowObject, {opening: 0, closing: 7})
+    expect(result.evaluatedRow).toStrictEqual([null, 0, 1, null, 0, 1, 0, null, null, 1])
   })
 })
 
