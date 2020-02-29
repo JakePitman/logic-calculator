@@ -1,6 +1,7 @@
 import {evalNot, evalOperator} from "../Operators"
 import { TruthValue } from "../../sharedTypes"
 import { permittedChars, permittedOperators, VariableAssignment } from "../../sharedTypes"
+import _ from "lodash"
 
 export type WorkingRow = (string | TruthValue | null)[]
 
@@ -42,7 +43,7 @@ export const createRowObject = (proposition: string): RowObject => {
 }
 
 export const resolveVariableAssignments = (rowObject: RowObject, variableAssignment: VariableAssignment): RowObject => {
-  const result = {...rowObject}
+  const result = _.cloneDeep(rowObject)
   const assignedVars = Object.keys(variableAssignment)
   result.workingRow.forEach(( char, i ) => {
     if (typeof char === "string" && assignedVars.includes(char)) {
@@ -62,7 +63,7 @@ export const innermostBrackets = (row: WorkingRow): {opening: number, closing: n
 
 // For use in evaluateInnermostBrackets only
 export const evaluateNegations = (rowObject: RowObject, innermostBrackets: {opening: number, closing: number}): RowObject => {
-  const result = {...rowObject}
+  const result = _.cloneDeep(rowObject)
   const {workingRow, evaluatedRow} = result
   const {opening, closing} = innermostBrackets
   let lastKnownValueIndex
@@ -83,7 +84,7 @@ export const evaluateNegations = (rowObject: RowObject, innermostBrackets: {open
 
 export const evaluateInnermostBrackets = (rowObject: RowObject): RowObject => {
   const { opening, closing } = innermostBrackets(rowObject.workingRow)
-  const result = {...evaluateNegations(rowObject, {opening, closing})}
+  const result = _.cloneDeep(evaluateNegations(rowObject, {opening, closing}))
   const {workingRow, evaluatedRow} = result
 
   // get index positions of left operator, operand, right operator
