@@ -65,13 +65,17 @@ export const evaluateNegations = (rowObject: RowObject, innermostBrackets: {open
   const result = {...rowObject}
   const {workingRow, evaluatedRow} = result
   const {opening, closing} = innermostBrackets
+  let lastKnownValueIndex
   let i
   for (i = closing; i > (opening - 1); i--) {
-    if (workingRow[i] === "~") {
-      const negationResult = evalNot(evaluatedRow[i + 1])
+    if (typeof workingRow[i] === "number") {
+      lastKnownValueIndex = i
+    } else if (workingRow[i] === "~") {
+      const negationResult = evalNot(evaluatedRow[lastKnownValueIndex])
       evaluatedRow[i] = negationResult
       workingRow[i] = negationResult
-      workingRow[i + 1] = null
+      workingRow[lastKnownValueIndex] = null
+      lastKnownValueIndex = i
     }
   }
   return result

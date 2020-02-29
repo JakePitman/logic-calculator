@@ -101,6 +101,17 @@ describe("evaluateNegations", () => {
     const result = evaluateNegations(rowObject, {opening: 0, closing: 7})
     expect(result.evaluatedRow).toStrictEqual([null, 0, 1, null, 0, 1, 0, null, null, 1])
   })
+
+  it("handles null values between ~ and the truth value it negates", () => {
+    const rowObject: RowObject = {
+      originalRow: ["(", "~", "(", "a", "&", "b", ")", "<>", "b", ")"],
+      workingRow: ["(", "~", null, null, 1, null, null, "<>", 1, ")"],
+      evaluatedRow: [null, null, null, null, 1, null, null, null, 1, null]
+    }
+    const result = evaluateNegations(rowObject, {opening: 0, closing: 9})
+    expect(result.workingRow).toStrictEqual(["(", 0, null, null, null, null, null, "<>", 1, ")"])
+    expect(result.evaluatedRow).toStrictEqual([null, 0, null, null, 1, null, null, null, 1, null])
+  })
 })
 
 describe("evaluateInnermostBrackets", () => {
