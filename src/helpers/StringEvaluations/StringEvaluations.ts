@@ -30,7 +30,9 @@ const resolveBiconditionals = (splitProposition: string[]) => {
 }
 
 export const createRowObject = (proposition: string): RowObject => {
-  const filteredByPermittedChars = proposition.split("").filter(e => isPermittedChar(e))
+  const propositionCopy = `(${proposition})`
+
+  const filteredByPermittedChars = propositionCopy.split("").filter(e => isPermittedChar(e))
   const symbolsArray = resolveBiconditionals(filteredByPermittedChars)
     
   return ( 
@@ -86,6 +88,19 @@ export const evaluateInnermostBrackets = (rowObject: RowObject): RowObject => {
   const { opening, closing } = innermostBrackets(rowObject.workingRow)
   const result = _.cloneDeep(evaluateNegations(rowObject, {opening, closing}))
   const {workingRow, evaluatedRow} = result
+
+  // if there is only one number, replace all brackets with null
+  const remainingTruthValues = workingRow.filter(e => {
+    return typeof e === "number"
+  })
+  if (remainingTruthValues.length === 1) {
+    workingRow.forEach((e, i) => {
+      if (e === "(" || e === ")") {
+        workingRow[i] = null
+      }
+    })
+    return result
+  }
 
   // get index positions of left operator, operand, right operator
   const indexes = []
