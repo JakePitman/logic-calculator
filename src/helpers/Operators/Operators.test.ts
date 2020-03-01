@@ -1,4 +1,4 @@
-import { evalAnd, evalOr, evalIfThen, evalBiconditional, evalNot } from './Operators'
+import { evalAnd, evalOr, evalIfThen, evalBiconditional, evalNot, evalOperator } from './Operators'
 
 describe('evalAnd', () => {
   test('returns 1 when both conjuncts are 1', () => {
@@ -52,5 +52,21 @@ describe('evalNot', () => {
   });
   test('returns 0 when truthValue is 1', () => {
     expect(evalNot(0)).toBe(1);
+  })
+})
+
+describe('evalOperator', () => {
+  test("returns the evaluated truth value of the operator", () => {
+    expect(evalOperator(0, "&", 1)).toBe(0)
+    expect(evalOperator(1, "&", 1)).toBe(1)
+    expect(evalOperator(0, "v", 0)).toBe(0)
+    expect(evalOperator(0, "v", 1)).toBe(1)
+    expect(evalOperator(1, ">", 0)).toBe(0)
+    expect(evalOperator(0, ">", 1)).toBe(1)
+    expect(evalOperator(1, "<>", 0)).toBe(0)
+    expect(evalOperator(0, "<>", 0)).toBe(1)
+  })
+  test("throws an error when passed an invalid operator", () => {
+    expect(() => evalOperator(0, "not_an_operator", 1)).toThrow()
   })
 })

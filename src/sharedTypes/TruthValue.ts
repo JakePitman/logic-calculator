@@ -1,0 +1,1 @@
+export type TruthValue = 1 | 0
