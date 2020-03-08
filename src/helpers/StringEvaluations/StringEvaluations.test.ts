@@ -1,4 +1,14 @@
-import {evaluateNegations, evaluateInnermostBrackets, createRowObject, resolveVariableAssignments, innermostBrackets, WorkingRow, RowObject, evaluateFullProposition } from './StringEvaluations'
+import {
+  evaluateNegations,
+  evaluateInnermostBrackets,
+  createRowObject,
+  resolveVariableAssignments,
+  innermostBrackets,
+  WorkingRow,
+  RowObject,
+  evaluateFullProposition,
+  evaluateVariablePermutation
+} from './StringEvaluations'
 import {VariableAssignment} from "../../sharedTypes"
 
 describe('createRowObject', () => {
@@ -187,12 +197,31 @@ describe("evaluateFullProposition", () => {
     })
 
   it("handles multiple outer bracket pairs", () => {
-      const rowObjectWithExtraBracketPair: RowObject = {
-        originalRow: ["(", "(", "(", "a", ">", "(", "a", "v", "b", ")", ")", ")", ")"],
-        workingRow: ["(", "(", "(", 1, ">", "(", 1, "v", 0, ")", ")", ")", ")"],
-        evaluatedRow: [null, null, null, 1, null, null, 1, null, 0, null, null, null, null],
-      }
-      const result = evaluateFullProposition(rowObjectWithExtraBracketPair)
-      expect(result.evaluatedRow).toStrictEqual([null, null, null, 1, 1, null, 1, 1, 0, null, null, null, null])
-    })
+    const rowObjectWithExtraBracketPair: RowObject = {
+      originalRow: ["(", "(", "(", "a", ">", "(", "a", "v", "b", ")", ")", ")", ")"],
+      workingRow: ["(", "(", "(", 1, ">", "(", 1, "v", 0, ")", ")", ")", ")"],
+      evaluatedRow: [null, null, null, 1, null, null, 1, null, 0, null, null, null, null],
+    }
+    const result = evaluateFullProposition(rowObjectWithExtraBracketPair)
+    expect(result.evaluatedRow).toStrictEqual([null, null, null, 1, 1, null, 1, 1, 0, null, null, null, null])
+  })
+})
+
+describe("evaluateVariablePermutation", () => {
+  const rowObject = {
+    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+    workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+    evaluatedRow: [null, null, null, null, null, null, null, null, null]
+  }
+  it("returns a rowObject, evaluated with the given variableAssignments", () => {
+    const variableAssignmentPermutation1: VariableAssignment = {a: 0, b: 1}
+    const resultTrue = evaluateVariablePermutation(rowObject, variableAssignmentPermutation1)
+    expect(resultTrue.evaluatedRow).toStrictEqual([null, null, 0, 1, 1, null, 1, 1, null])
+    expect(resultTrue.workingRow).toStrictEqual([null, null, null, null, null, null, 1, null, null])
+
+    const variableAssignmentPermutation2: VariableAssignment = {a: 1, b: 0}
+    const resultFalse = evaluateVariablePermutation(rowObject, variableAssignmentPermutation2)
+    expect(resultFalse.evaluatedRow).toStrictEqual([null, null, 1, 1, 0, null, 0, 0, null])
+    expect(resultFalse.workingRow).toStrictEqual([null, null, null, null, null, null, 0, null, null])
+  })
 })

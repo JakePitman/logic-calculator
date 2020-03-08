@@ -154,3 +154,8 @@ export const evaluateFullProposition = (rowObject: RowObject): RowObject => {
     return rowObject
   }
 }
+
+export const evaluateVariablePermutation = (rowObject: RowObject, variableAssignment: VariableAssignment): RowObject => {
+  const withVariablesAssigned = resolveVariableAssignments(rowObject, variableAssignment)
+  return evaluateFullProposition(withVariablesAssigned)
+}
