@@ -1,3 +1,4 @@
+import { permittedVars } from "../src/sharedTypes/PermittedChars"
 const inquirer = require('inquirer');
 const chalk = require("chalk")
 
@@ -50,8 +51,11 @@ const askForVariableAssignments = (variables: string[]) => {
 
 export default async () => {
   const { proposition } = await askForProposition()
-  // TODO - extract these from the proposition
-  const variables = ["a", "b", "c"]
+  const variables: string[] = proposition.split("").filter(( char: string ) => {
+    return permittedVars.includes(char)
+  }).reduce((arr: string[], char: string) => {
+    return arr.includes(char) ? arr : [...arr, char]
+  }, [])
   const variableAssignments = await askForVariableAssignments(variables)
 
   return { proposition, variableAssignments }
