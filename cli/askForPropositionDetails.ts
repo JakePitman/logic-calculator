@@ -1,4 +1,4 @@
-import { permittedVars } from "../src/sharedTypes/PermittedChars"
+import { permittedVars, permittedChars } from "../src/sharedTypes/PermittedChars"
 const inquirer = require('inquirer');
 const chalk = require("chalk")
 
@@ -52,6 +52,9 @@ const askForVariableAssignments = (variables: string[]) => {
 export default async () => {
   const { proposition } = await askForProposition()
   const variables: string[] = proposition.split("").filter(( char: string ) => {
+    if (!permittedChars.includes(char) && char !== " ") {
+      throw Error(`Non-permitted char found: ${char}`)
+    }
     return permittedVars.includes(char)
   }).reduce((arr: string[], char: string) => {
     return arr.includes(char) ? arr : [...arr, char]
