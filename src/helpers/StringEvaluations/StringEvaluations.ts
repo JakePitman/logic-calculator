@@ -1,6 +1,11 @@
 import {evalNot, evalOperator} from "../Operators"
 import { TruthValue } from "../../sharedTypes"
-import { permittedChars, permittedOperators, VariableAssignment } from "../../sharedTypes"
+import {
+  permittedChars,
+  permittedVars,
+  permittedOperators,
+  VariableAssignment
+} from "../../sharedTypes"
 import _ from "lodash"
 
 export type WorkingRow = (string | TruthValue | null)[]
@@ -47,10 +52,13 @@ export const createRowObject = (proposition: string): RowObject => {
 export const resolveVariableAssignments = (rowObject: RowObject, variableAssignment: VariableAssignment): RowObject => {
   const result = _.cloneDeep(rowObject)
   const assignedVars = Object.keys(variableAssignment)
+
   result.workingRow.forEach(( char, i ) => {
     if (typeof char === "string" && assignedVars.includes(char)) {
       result.workingRow[i] = variableAssignment[char]
       result.evaluatedRow[i] = variableAssignment[char]
+    } else if (typeof char === "string" && permittedVars.includes(char)) {
+      throw Error(`Found unassigned var in proposition: ${char}`)
     }
   })
   return result

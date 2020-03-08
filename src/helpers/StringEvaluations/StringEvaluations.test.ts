@@ -82,15 +82,9 @@ describe("resolveVariableAssignments", () => {
     )
   })
 
-  it("leaves corresponding index positions unchanged if var is not assigned", () => {
+  it("throws an error if variableAssignment is incomplete", () => {
     const variableAssignment: VariableAssignment = { "p": 1 }
-    const result = resolveVariableAssignments(rowObject, variableAssignment)
-    expect(result.workingRow).toStrictEqual(
-      ["(", "~", "(", "(", "a", "&", "b", ")", "<>", 1, ")", ")"]
-    )
-    expect(result.evaluatedRow).toStrictEqual(
-      [null, null, null, null, null, null, null, null, null, 1, null, null]
-    )
+    expect(() => { resolveVariableAssignments( rowObject, variableAssignment )}).toThrow()
   })
 })
 
