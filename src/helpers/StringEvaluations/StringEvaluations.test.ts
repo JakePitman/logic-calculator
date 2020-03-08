@@ -9,7 +9,7 @@ import {
   evaluateFullProposition,
   evaluateVariablePermutation
 } from './StringEvaluations'
-import {VariableAssignment} from "../../sharedTypes"
+import {VariableAssignments} from "../../sharedTypes"
 
 describe('createRowObject', () => {
   test('splits string arg into array & sets as originalRow and workingRow properties', () => {
@@ -68,12 +68,12 @@ describe("resolveVariableAssignments", () => {
   })
 
   it("replaces corresponding null in workingRow & evaluatedRow with value assigned to variable in originalRow", () => {
-    const variableAssignment: VariableAssignment = {
+    const variableAssignments: VariableAssignments = {
       "a": 1,
       "b": 0,
       "p": 1
     }
-    const result = resolveVariableAssignments(rowObject, variableAssignment)
+    const result = resolveVariableAssignments(rowObject, variableAssignments)
     expect(result.workingRow).toStrictEqual(
       ["(", "~", "(", "(", 1, "&", 0, ")", "<>", 1, ")", ")"]
     )
@@ -82,9 +82,9 @@ describe("resolveVariableAssignments", () => {
     )
   })
 
-  it("throws an error if variableAssignment is incomplete", () => {
-    const variableAssignment: VariableAssignment = { "p": 1 }
-    expect(() => { resolveVariableAssignments( rowObject, variableAssignment )}).toThrow()
+  it("throws an error if variableAssignments is incomplete", () => {
+    const variableAssignments: VariableAssignments = { "p": 1 }
+    expect(() => { resolveVariableAssignments( rowObject, variableAssignments )}).toThrow()
   })
 })
 

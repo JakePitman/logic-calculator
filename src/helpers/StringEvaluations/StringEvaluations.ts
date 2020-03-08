@@ -4,7 +4,7 @@ import {
   permittedChars,
   permittedVars,
   permittedOperators,
-  VariableAssignment
+  VariableAssignments
 } from "../../sharedTypes"
 import _ from "lodash"
 
@@ -49,14 +49,14 @@ export const createRowObject = (proposition: string): RowObject => {
   )
 }
 
-export const resolveVariableAssignments = (rowObject: RowObject, variableAssignment: VariableAssignment): RowObject => {
+export const resolveVariableAssignments = (rowObject: RowObject, variableAssignments: VariableAssignments): RowObject => {
   const result = _.cloneDeep(rowObject)
-  const assignedVars = Object.keys(variableAssignment)
+  const assignedVars = Object.keys(variableAssignments)
 
   result.workingRow.forEach(( char, i ) => {
     if (typeof char === "string" && assignedVars.includes(char)) {
-      result.workingRow[i] = variableAssignment[char]
-      result.evaluatedRow[i] = variableAssignment[char]
+      result.workingRow[i] = variableAssignments[char]
+      result.evaluatedRow[i] = variableAssignments[char]
     } else if (typeof char === "string" && permittedVars.includes(char)) {
       throw Error(`Found unassigned var in proposition: ${char}`)
     }
@@ -163,7 +163,7 @@ export const evaluateFullProposition = (rowObject: RowObject): RowObject => {
   }
 }
 
-export const evaluateVariablePermutation = (rowObject: RowObject, variableAssignment: VariableAssignment): RowObject => {
-  const withVariablesAssigned = resolveVariableAssignments(rowObject, variableAssignment)
+export const evaluateVariablePermutation = (rowObject: RowObject, variableAssignments: VariableAssignments): RowObject => {
+  const withVariablesAssigned = resolveVariableAssignments(rowObject, variableAssignments)
   return evaluateFullProposition(withVariablesAssigned)
 }
