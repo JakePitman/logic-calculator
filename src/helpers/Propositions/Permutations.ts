@@ -7,7 +7,7 @@ export const generatePermutations = (unassignedVariables: string[]): VariableAss
   const result = []
 
   for (let i = 0; i < (1 << AMOUNT_OF_VARIABLES); i++) {
-    let permutation = {};
+    let permutation: VariableAssignments = {};
     for (let j = AMOUNT_OF_VARIABLES - 1; j >= 0; j--) {
       const truthValue = Boolean(i & (1 << j)) ? 1 : 0
       permutation[unassignedVariables[j]] = truthValue
@@ -25,8 +25,8 @@ export const evaluateVariablePermutation = (rowObject: RowObject, variableAssign
 export const evaluateAllVariablePermutations = 
   (rowObject: RowObject, variableAssignments: VariableAssignments)
   : {variableAssignments: VariableAssignments, rowObject: RowObject}[] => {
-    const assignedVars = []
-    const unassignedVars = []
+    const assignedVars: string[] = []
+    const unassignedVars: string[] = []
     Object.keys(variableAssignments).forEach(variable => {
       if (variableAssignments[variable] === null) {
         unassignedVars.push(variable)

@@ -1,5 +1,5 @@
 import {evalNot, evalOperator} from "../Operators"
-import {RowObject, WorkingRow, permittedOperators} from "../../sharedTypes"
+import {RowObject, WorkingRow, permittedOperators, TruthValue} from "../../sharedTypes"
 import _ from "lodash"
 
 export const innermostBrackets = (row: WorkingRow): {opening: number, closing: number} => {
@@ -70,7 +70,7 @@ export const evaluateInnermostBrackets = (rowObject: RowObject): RowObject => {
   const operator = workingRow[indexes[1]]
   const rightOperand = workingRow[indexes[2]]
 
-  let operatorResult
+  let operatorResult: TruthValue
   if((typeof leftOperand !== "string") && (typeof operator === "string") && (typeof rightOperand !== "string")){
     operatorResult = evalOperator(
       leftOperand,
