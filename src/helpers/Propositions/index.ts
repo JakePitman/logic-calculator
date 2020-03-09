@@ -1,3 +1,10 @@
-import { evaluateFullProposition } from "./StringEvaluations"
+import { VariableAssignments } from "../../sharedTypes"
+import { evaluateAllVariablePermutations } from "./Permutations"
+import { createRowObject } from "./StringEvaluations"
 
-export default evaluateFullProposition
+const evaluateRawDetails = (proposition: string, variableAssignments: VariableAssignments) => {
+  const rowObject = createRowObject(proposition)
+  return evaluateAllVariablePermutations(rowObject, variableAssignments)
+}
+
+export default evaluateRawDetails
