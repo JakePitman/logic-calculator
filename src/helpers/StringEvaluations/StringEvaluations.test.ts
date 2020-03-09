@@ -261,3 +261,78 @@ describe("generatePermutations", () => {
     })
   })
 })
+
+describe("evaluateAllVariablePermutations", () => {
+  const rowObject: RowObject = {
+    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+    workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+    evaluatedRow: [null, null, null, null, null, null, null, null, null]
+  }
+  const permutationResults = { 
+    "a-1,b-1": {
+      variableAssignments: { a: 1, b: 1 },
+      rowObject: {
+        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+        workingRow: [null, null, null, null, null, null, 1, null, null],
+        evaluatedRow: [null, null, 1, 1, 1, null, 1, 1, null]
+      }
+    },
+    "a-0,b-1": {
+      variableAssignments: { a: 0, b: 1 },
+      rowObject: {
+        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+        workingRow: [null, null, null, null, null, null, 1, null, null],
+        evaluatedRow: [null, null, 0, 1, 1, null, 1, 1, null]
+      }
+    },
+    "a-1,b-0": {
+      variableAssignments: { a: 1, b: 0 },
+      rowObject: {
+        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+        workingRow: [null, null, null, null, null, null, 0, null, null],
+        evaluatedRow: [null, null, 1, 1, 0, null, 0, 0, null]
+      }
+    },
+    "a-0,b-0": {
+      variableAssignments: { a: 0, b: 0 },
+      rowObject: {
+        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
+        workingRow: [null, null, null, null, null, null, 1, null, null],
+        evaluatedRow: [null, null, 0, 0, 0, null, 1, 0, null]
+      }
+    }
+  }
+
+  describe("with all variables unassigned", () => {
+    const variableAssignmentsWithNoAssigns: VariableAssignments = { a: null, b: null }
+    const result = evaluateAllVariablePermutations(rowObject, variableAssignmentsWithNoAssigns)
+    it("returns evaluated rowObjects for all possible permutations", () => {
+      Object.keys( permutationResults ).forEach((key) => {
+        expect(result).toContainEqual(permutationResults[key])
+      })
+    })
+  })
+
+  describe("with some variables assigned", () => {
+    const variableAssignmentsWithSomeAssigns: VariableAssignments = { a: 1, b: null }
+    const result = evaluateAllVariablePermutations(rowObject, variableAssignmentsWithSomeAssigns)
+    it("returns evaluated rowObjects for all permutations of unassigned variables", () => {
+      expect(result).toContainEqual(permutationResults["a-1,b-1"])
+      expect(result).toContainEqual(permutationResults["a-1,b-0"])
+    })
+    it("returns with length matching number of possible unassigned permutations", () => {
+      expect(result.length).toEqual(2)
+    })
+  })
+
+  describe("with all variables assigned", () => {
+    const variableAssignmentsWithAllAssigns: VariableAssignments = { a: 1, b: 0 }
+    const result = evaluateAllVariablePermutations(rowObject, variableAssignmentsWithAllAssigns)
+    it("returns evaluated rowObject for specified permutation", () => {
+    expect(result).toContainEqual(permutationResults["a-1,b-0"])
+    })
+    it("returns with length matching number of possible unassigned permutations", () => {
+      expect(result.length).toEqual(1)
+    })
+  })
+})
