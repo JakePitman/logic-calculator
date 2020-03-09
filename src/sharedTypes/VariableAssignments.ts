@@ -1,5 +1,5 @@
 import { TruthValue } from "./index"
 
-export type VariableAssignment = {
+export type VariableAssignments = {
   [key: string]: TruthValue
 }
