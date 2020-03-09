@@ -11,7 +11,7 @@ const isPermittedChar = (char: string) => {
 }
 
 const resolveBiconditionals = (splitProposition: string[]) => {
-  const result = []
+  const result: string[] = []
   splitProposition.forEach((char, i, arr) => {
     if (char === "<") {
       result.push("<>") 
