@@ -2,7 +2,7 @@ import { RowObject, VariableAssignments } from "../../sharedTypes"
 import { resolveVariableAssignments } from "./StringEvaluations"
 import { evaluateFullProposition } from "./LogicEvaluations"
 
-export const generatePermutations = (unassignedVariables: string[]): VariableAssignments[] => {
+export const generatePermutations = (unassignedVariables: string[], variableAssignments: VariableAssignments): VariableAssignments[] => {
   const AMOUNT_OF_VARIABLES = unassignedVariables.length;
   const result = []
 
@@ -12,7 +12,7 @@ export const generatePermutations = (unassignedVariables: string[]): VariableAss
       const truthValue = Boolean(i & (1 << j)) ? 1 : 0
       permutation[unassignedVariables[j]] = truthValue
     }
-    result.push(permutation)
+    result.push({ ...variableAssignments, ...permutation })
   }
   return(result)
 }
@@ -35,16 +35,9 @@ export const evaluateAllVariablePermutations =
       }
     })
 
-    //TODO: handle this in generatePermutations
-      // (pass in variableAssignments, and spread there instead)
-    //without variableAssignments
-    const permutations = generatePermutations(unassignedVars)
-    //with variableAssignments
-    const completePermutations = permutations.map(permutation => {
-      return({...variableAssignments, ...permutation })
-    })
+    const permutations = generatePermutations(unassignedVars, variableAssignments)
 
-    const result = completePermutations.map(permutation => {
+    const result = permutations.map(permutation => {
       return({
         variableAssignments: permutation,
         rowObject: evaluateVariablePermutation(rowObject, permutation)

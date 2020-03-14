@@ -24,39 +24,40 @@ describe("evaluateVariablePermutation", () => {
 })
 
 describe("generatePermutations", () => {
+  const variableAssignments: VariableAssignments = {z: 1, y: 0}
   describe("with one unassigned variable", () => {
     const unassignedVariables = ["b"]
-    it("returns both possibilities of unassigned variable", () => {
-      expect(generatePermutations(unassignedVariables)).toStrictEqual([
-        {b: 0},
-        {b: 1}
+    it("returns both possibilities of unassigned variable, with variableAssignments attached", () => {
+      expect(generatePermutations(unassignedVariables, variableAssignments)).toStrictEqual([
+        {b: 0, z: 1, y: 0},
+        {b: 1, z: 1, y: 0}
       ])
     })
   })
-  describe("with two unassigned variables", () => {
+  describe("with two unassigned variables, with variableAssignments attached", () => {
     const unassignedVariables = ["b", "c"]
     it("returns all 4 possible permutations", () => {
-      expect(generatePermutations(unassignedVariables)).toStrictEqual([
-        {b: 0, c: 0},
-        {b: 1, c: 0},
-        {b: 0, c: 1},
-        {b: 1, c: 1}
+      expect(generatePermutations(unassignedVariables, variableAssignments)).toStrictEqual([
+        {b: 0, c: 0, z: 1, y: 0},
+        {b: 1, c: 0, z: 1, y: 0},
+        {b: 0, c: 1, z: 1, y: 0},
+        {b: 1, c: 1, z: 1, y: 0}
       ])
     })
   }),
-  describe("with three unassigned variables", () => {
+  describe("with three unassigned variables, with variableAssignments attached", () => {
     const unassignedVariables = ["b", "c", "d"]
     const expected: VariableAssignments[] = [
-      {b: 0, c: 0, d: 0},
-      {b: 1, c: 0, d: 0},
-      {b: 0, c: 1, d: 0},
-      {b: 1, c: 1, d: 0},
-      {b: 0, c: 0, d: 1},
-      {b: 1, c: 0, d: 1},
-      {b: 0, c: 1, d: 1},
-      {b: 1, c: 1, d: 1},
+      {b: 0, c: 0, d: 0, z: 1, y: 0},
+      {b: 1, c: 0, d: 0, z: 1, y: 0},
+      {b: 0, c: 1, d: 0, z: 1, y: 0},
+      {b: 1, c: 1, d: 0, z: 1, y: 0},
+      {b: 0, c: 0, d: 1, z: 1, y: 0},
+      {b: 1, c: 0, d: 1, z: 1, y: 0},
+      {b: 0, c: 1, d: 1, z: 1, y: 0},
+      {b: 1, c: 1, d: 1, z: 1, y: 0},
     ]
-    const result = generatePermutations(unassignedVariables)
+    const result = generatePermutations(unassignedVariables, variableAssignments)
     it("returns all 8 possible permutations", () => {
       expect(result).toStrictEqual(expected)
     })
