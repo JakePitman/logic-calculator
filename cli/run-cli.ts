@@ -16,12 +16,11 @@ console.log(
 );
 
 askForPropositionDetails().then(details => {
-  const evaluatedPermutations = evaluateRawDetails(details.proposition, details.variableAssignments)
+  const { originalProposition, evaluatedRows } = evaluateRawDetails(details.proposition, details.variableAssignments)
     console.log(chalk.cyanBright("-------------------------------"))
     console.log(chalk.cyanBright("Original Proposition: "))
-    //TODO This is the same as workingRow for some reason...
-    console.log(evaluatedPermutations[0].rowObject.originalRow)
-  evaluatedPermutations.forEach(evaluation => {
+    console.log(originalProposition)
+  evaluatedRows.forEach(evaluation => {
     console.log(chalk.cyanBright("With these variable assignments: "))
     console.log(evaluation.variableAssignments)
     console.log(chalk.cyanBright("Working:"))

@@ -1,12 +1,12 @@
 import { VariableAssignments } from "../../sharedTypes"
 import { evaluateAllVariablePermutations } from "./Permutations"
-import { createRowObject } from "./StringEvaluations"
+import { propositionStringToArray, createRowObject } from "./StringEvaluations"
 
-//TODO return an object with evalutations, AND original proposition
-//** Instead of having original proposition (originalRow) in the rowObject
 const evaluateRawDetails = (proposition: string, variableAssignments: VariableAssignments) => {
-  const rowObject = createRowObject(proposition)
-  return evaluateAllVariablePermutations(rowObject, variableAssignments)
+  const originalProposition = propositionStringToArray(proposition)
+  const rowObject = createRowObject(originalProposition)
+  const evaluatedRows = evaluateAllVariablePermutations(rowObject, variableAssignments)
+  return {originalProposition, evaluatedRows}
 }
 
 export default evaluateRawDetails
