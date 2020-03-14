@@ -24,17 +24,18 @@ const resolveBiconditionals = (splitProposition: string[]) => {
   return result
 }
 
-export const createRowObject = (proposition: string): RowObject => {
-  const propositionCopy = `(${proposition})`
+// export const createRowObject = (proposition: string): RowObject => {
+export const createRowObject = (propositionArray: string[]): RowObject => {
+  // const propositionCopy = `(${proposition})`
 
-  const filteredByPermittedChars = propositionCopy.split("").filter(e => isPermittedChar(e))
-  const symbolsArray = resolveBiconditionals(filteredByPermittedChars)
+  // const filteredByPermittedChars = propositionCopy.split("").filter(e => isPermittedChar(e))
+  // const symbolsArray = resolveBiconditionals(filteredByPermittedChars)
     
+  console.log("PROP_ARR: ", propositionArray)
   return ( 
     {
-      originalRow: symbolsArray,
-      workingRow: symbolsArray,
-      evaluatedRow: symbolsArray.map(e => null)
+      workingRow: propositionArray,
+      evaluatedRow: propositionArray.map(e => null)
     }
   )
 }

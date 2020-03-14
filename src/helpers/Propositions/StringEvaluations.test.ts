@@ -1,49 +1,53 @@
 import { createRowObject, resolveVariableAssignments, } from './StringEvaluations'
 import { VariableAssignments, } from "../../sharedTypes"
 
+describe('propositionStringToArray', () => {
+  //TODO Handle in propositionStringToArray
+  // test("adds an extra bracket pair around entire proposition", () => {
+  //   const testString = "avb"
+  //   const result = createRowObject(testString)
+  //   expect(result.originalRow[0]).toBe("(")
+  //   expect(result.originalRow[result.originalRow.length - 1]).toBe(")")
+  // })
+
+  //TODO Handle in propositionStringToArray
+  // test ('removes whitespace', () => {
+  //   const testString = "a >b "
+  //   const result = createRowObject(testString)
+  //   expect(result.originalRow).toStrictEqual(["(", "a", ">", "b", ")"])
+  //   expect(result.workingRow).toStrictEqual(["(", "a", ">", "b", ")"])
+  //   expect(result.evaluatedRow.length).toEqual(result.originalRow.length)
+  // })
+
+  //TODO Handle in propositionStringToArray
+  // test ('resolves "<" as "<>"', () => {
+  //   const testString = "a<b"
+  //   const result = createRowObject(testString)
+  //   expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
+  //   expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
+  // })
+
+  //TODO Handle in propositionStringToArray
+  // test ('resolves ["<", ">"] as "<>"', () => {
+  //   const testString = "a<>b"
+  //   const result = createRowObject(testString)
+  //   expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
+  //   expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
+  // })
+})
+
 describe('createRowObject', () => {
-  test('splits string arg into array & sets as originalRow and workingRow properties', () => {
-    const testString = "(a>b)&~(avb)"
-    const result = createRowObject(testString)
-    expect(result.originalRow).toStrictEqual(["(", "(", "a", ">", "b", ")", "&", "~", "(", "a", "v", "b", ")", ")"])
-    expect(result.workingRow).toStrictEqual(["(", "(", "a", ">", "b", ")", "&", "~", "(", "a", "v", "b", ")", ")"])
+  test('returns a workingRow property equivalent to the given array', () => {
+    const testArray = ["(", "(", "a", ">", "b", ")", "&", "~", "(", "a", "v", "b", ")", ")"]
+    const result = createRowObject(testArray)
+    expect(result.workingRow).toStrictEqual(testArray)
   });
 
-  test("adds an extra bracket pair around entire proposition", () => {
-    const testString = "avb"
-    const result = createRowObject(testString)
-    expect(result.originalRow[0]).toBe("(")
-    expect(result.originalRow[result.originalRow.length - 1]).toBe(")")
-  })
-
-  test('evaluatedRow is an array of null with same length as original & working rows', () => {
-    const testString = "a>b"
-    const result = createRowObject(testString)
+  test('evaluatedRow is an array of null with same length as working row', () => {
+    const testArray = ["(", "a", ">", "b", ")"]
+    const result = createRowObject(testArray)
     expect(result.evaluatedRow).toStrictEqual([null, null, null, null, null])
-    expect(result.evaluatedRow.length).toEqual(result.originalRow.length)
     expect(result.evaluatedRow.length).toEqual(result.workingRow.length)
-  })
-
-  test ('removes whitespace', () => {
-    const testString = "a >b "
-    const result = createRowObject(testString)
-    expect(result.originalRow).toStrictEqual(["(", "a", ">", "b", ")"])
-    expect(result.workingRow).toStrictEqual(["(", "a", ">", "b", ")"])
-    expect(result.evaluatedRow.length).toEqual(result.originalRow.length)
-  })
-
-  test ('resolves "<" as "<>"', () => {
-    const testString = "a<b"
-    const result = createRowObject(testString)
-    expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-    expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-  })
-
-  test ('resolves ["<", ">"] as "<>"', () => {
-    const testString = "a<>b"
-    const result = createRowObject(testString)
-    expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-    expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
   })
 })
 
@@ -51,13 +55,12 @@ describe("resolveVariableAssignments", () => {
   let rowObject
   beforeEach(() => {
     rowObject = {
-      originalRow: ["(", "~", "(", "(", "a", "&", "b", ")", "<>", "p", ")", ")"],
       workingRow: ["(", "~", "(", "(", "a", "&", "b", ")", "<>", "p", ")", ")"],
       evaluatedRow: [null, null, null, null, null, null, null, null, null, null, null, null]
     }
   })
 
-  it("replaces corresponding null in workingRow & evaluatedRow with value assigned to variable in originalRow", () => {
+  it("replaces variable strings with the values given in variableAssignments", () => {
     const variableAssignments: VariableAssignments = {
       "a": 1,
       "b": 0,

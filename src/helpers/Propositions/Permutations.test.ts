@@ -7,7 +7,6 @@ import {
 
 describe("evaluateVariablePermutation", () => {
   const rowObject = {
-    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     evaluatedRow: [null, null, null, null, null, null, null, null, null]
   }
@@ -66,7 +65,6 @@ describe("generatePermutations", () => {
 
 describe("evaluateAllVariablePermutations", () => {
   const rowObject: RowObject = {
-    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     evaluatedRow: [null, null, null, null, null, null, null, null, null]
   }
@@ -74,7 +72,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-1,b-1": {
       variableAssignments: { a: 1, b: 1 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 1, 1, 1, null, 1, 1, null]
       }
@@ -82,7 +79,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-0,b-1": {
       variableAssignments: { a: 0, b: 1 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 0, 1, 1, null, 1, 1, null]
       }
@@ -90,7 +86,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-1,b-0": {
       variableAssignments: { a: 1, b: 0 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 0, null, null],
         evaluatedRow: [null, null, 1, 1, 0, null, 0, 0, null]
       }
@@ -98,7 +93,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-0,b-0": {
       variableAssignments: { a: 0, b: 0 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 0, 0, 0, null, 1, 0, null]
       }
