@@ -1,39 +1,31 @@
-import { createRowObject, resolveVariableAssignments, } from './StringEvaluations'
+import { propositionStringToArray, createRowObject, resolveVariableAssignments, } from './StringEvaluations'
 import { VariableAssignments, } from "../../sharedTypes"
 
 describe('propositionStringToArray', () => {
-  //TODO Handle in propositionStringToArray
-  // test("adds an extra bracket pair around entire proposition", () => {
-  //   const testString = "avb"
-  //   const result = createRowObject(testString)
-  //   expect(result.originalRow[0]).toBe("(")
-  //   expect(result.originalRow[result.originalRow.length - 1]).toBe(")")
-  // })
+  test("adds an extra bracket pair around entire proposition", () => {
+    const testString = "avb"
+    const result = propositionStringToArray(testString)
+    expect(result[0]).toBe("(")
+    expect(result[result.length - 1]).toBe(")")
+  })
 
-  //TODO Handle in propositionStringToArray
-  // test ('removes whitespace', () => {
-  //   const testString = "a >b "
-  //   const result = createRowObject(testString)
-  //   expect(result.originalRow).toStrictEqual(["(", "a", ">", "b", ")"])
-  //   expect(result.workingRow).toStrictEqual(["(", "a", ">", "b", ")"])
-  //   expect(result.evaluatedRow.length).toEqual(result.originalRow.length)
-  // })
+  test ('removes whitespace', () => {
+    const testString = "a >b "
+    const result = propositionStringToArray(testString)
+    expect(result).toStrictEqual(["(", "a", ">", "b", ")"])
+  })
 
-  //TODO Handle in propositionStringToArray
-  // test ('resolves "<" as "<>"', () => {
-  //   const testString = "a<b"
-  //   const result = createRowObject(testString)
-  //   expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-  //   expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-  // })
+  test ('resolves "<" as "<>"', () => {
+    const testString = "a<b"
+    const result = propositionStringToArray(testString)
+    expect(result).toStrictEqual(["(", "a", "<>", "b", ")"])
+  })
 
-  //TODO Handle in propositionStringToArray
-  // test ('resolves ["<", ">"] as "<>"', () => {
-  //   const testString = "a<>b"
-  //   const result = createRowObject(testString)
-  //   expect(result.originalRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-  //   expect(result.workingRow).toStrictEqual(["(", "a", "<>", "b", ")"])
-  // })
+  test ('resolves ["<", ">"] as "<>"', () => {
+    const testString = "a<>b"
+    const result = propositionStringToArray(testString)
+    expect(result).toStrictEqual(["(", "a", "<>", "b", ")"])
+  })
 })
 
 describe('createRowObject', () => {
