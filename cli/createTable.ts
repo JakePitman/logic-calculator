@@ -2,16 +2,22 @@ import { VariableAssignments, RowObject } from "../src/sharedTypes"
 const Table = require("tty-table")
 import chalk from "chalk"
 
-export default (
-    originalProposition: string[],
-    evaluatedRows: {variableAssignments: VariableAssignments, rowObject: RowObject}[]
-  ) => {
+type EvaluatedRows = {
+  variableAssignments: VariableAssignments,
+  rowObject: RowObject
+}[]
+
+const createHeader = (originalProposition: string[]) => {
   const header = originalProposition.map(char => {
     return {
       value: char
     }
   })
   header.unshift({ value: "Variable Assignments" } )
+  return header
+}
+
+const createRows = (evaluatedRows: EvaluatedRows) => {
   const rows = evaluatedRows.map((evaluation) => {
     const { evaluatedRow, workingRow } = evaluation.rowObject
     const overallTruthValue = workingRow.find(e => {return typeof e === "number"})
@@ -29,6 +35,14 @@ export default (
     result.unshift(variableAssignmentsString)
     return result
   })
+  return rows
+}
 
+export default (
+    originalProposition: string[],
+    evaluatedRows: EvaluatedRows
+  ) => {
+  const header = createHeader(originalProposition)
+  const rows = createRows(evaluatedRows)
   return Table(header, rows).render()
 }
