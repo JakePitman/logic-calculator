@@ -1,12 +1,7 @@
-import { VariableAssignments, RowObject } from "../src/sharedTypes"
+import { VariableAssignments, RowObject, EvaluatedRows } from "../src/sharedTypes"
 import { colorizeDarkBlue, colorizeTrue, colorizeFalse } from "./colorize"
 
 const Table = require("tty-table")
-
-type EvaluatedRows = {
-  variableAssignments: VariableAssignments,
-  rowObject: RowObject
-}[]
 
 const createHeader = (originalProposition: string[]) => {
   const header = originalProposition.map(char => {
