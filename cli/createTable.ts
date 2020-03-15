@@ -1,6 +1,7 @@
 import { VariableAssignments, RowObject } from "../src/sharedTypes"
+import { colorizeDarkBlue, colorizeTrue, colorizeFalse } from "./colorize"
+
 const Table = require("tty-table")
-import chalk from "chalk"
 
 type EvaluatedRows = {
   variableAssignments: VariableAssignments,
@@ -10,10 +11,10 @@ type EvaluatedRows = {
 const createHeader = (originalProposition: string[]) => {
   const header = originalProposition.map(char => {
     return {
-      value: char
+      value: colorizeDarkBlue(char),
     }
   })
-  header.unshift({ value: "Variable Assignments" } )
+  header.unshift({ value: colorizeDarkBlue("Variable Assignments")})
   return header
 }
 
@@ -24,7 +25,7 @@ const createRows = (evaluatedRows: EvaluatedRows) => {
     const indexOfOverallTruthValue = workingRow.indexOf(overallTruthValue)
     const result = evaluatedRow.map((char, i) => {
       if (i === indexOfOverallTruthValue) {
-        return char === 1 ? chalk.green("1") : chalk.red("0")
+        return char === 1 ? colorizeTrue("1") : colorizeFalse("0")
       } else {
         return char === null ? "" : `${char}`
       }

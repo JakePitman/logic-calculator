@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import evaluateRawDetails from "../src/helpers/Propositions"
 import createTable from "./createTable"
+import { colorizeDarkBlue } from "./colorize"
 
-import chalk from "chalk"
 import clear from "clear"
 import figlet from "figlet"
 
@@ -11,7 +11,7 @@ import askForPropositionDetails from "./askForPropositionDetails"
 clear();
 
 console.log(
-  chalk.cyanBright(
+  colorizeDarkBlue(
     figlet.textSync('Logic\nCalculator', { font: "Small Poison" , horizontalLayout: 'fitted' })
   )
 );
