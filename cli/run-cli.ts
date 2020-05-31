@@ -6,21 +6,24 @@ import { printBanner, printTable } from "./printOutput"
 import clear from "clear"
 
 import askForPropositionDetails from "./askForPropositionDetails"
+import secondaryOptionsMenu from "./secondaryOptionsMenu"
 
-clear();
+const mainLoop = async () => {
+  
+  clear();
+  printBanner()
 
-printBanner()
-
-askForPropositionDetails().then(details => {
-
+  const {proposition, variables, variableAssignments} = await askForPropositionDetails()
   // This is a quick hack to get ALL permutations regardless of assignments,
   // so that I can run filters against the complete table.
   // This will allow users to change filters without re-evaluating the equation.
   const allVariablesAssignedNull: {[key: string]: null} = {}
-  details.variables.forEach(variable => {
+  variables.forEach(variable => {
     allVariablesAssignedNull[variable] = null
   })
 
-  const { originalProposition, evaluatedRows } = evaluateRawDetails(details.proposition, allVariablesAssignedNull)
-  printTable(originalProposition, evaluatedRows, details.variableAssignments)
-})
+  const { originalProposition, evaluatedRows } = evaluateRawDetails(proposition, allVariablesAssignedNull)
+  printTable(originalProposition, evaluatedRows, variableAssignments)
+}
+
+mainLoop()
