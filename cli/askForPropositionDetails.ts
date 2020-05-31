@@ -1,4 +1,5 @@
 import { permittedVars, permittedChars } from "../src/sharedTypes/PermittedChars"
+import askForVariableAssignments from "./askForVariableAssignments"
 const inquirer = require('inquirer');
 
 const askForProposition = () => {
@@ -19,36 +20,7 @@ const askForProposition = () => {
   return inquirer.prompt(questions);
 }
 
-const askForVariableAssignments = (variables: string[]) => {
-  const questions = variables.map(variable => {
-    return {
-      name: variable,
-      type: 'input',
-      message: `${variable}: `,
-      filter: (assignment: string) => {
-        const parsed = parseInt(assignment)
-        if ( parsed === 1 || parsed === 0 ) {
-          return parsed
-        } else if ( assignment === "" ) {
-          return null
-        } else {
-          return assignment
-        }
-      },
-      validate: ( assignment: number | null) => {
-        if (assignment === 1 || assignment === 0  || assignment === null) {
-          return true
-        } else {
-          return "Assignment must be 1, 0, or empty"
-        }
-      }
-    }
-  })
-  
-  return inquirer.prompt(questions)
-}
-
-export default async () => {
+export default async (): Promise<{proposition: string, variables: string[], variableAssignments: {[key: string]: 1 | 0 | null}}> => {
   const { proposition } = await askForProposition()
   const variables: string[] = proposition.split("").filter(( char: string ) => {
     if (!permittedChars.includes(char) && char !== " ") {

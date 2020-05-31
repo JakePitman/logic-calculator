@@ -7,13 +7,15 @@ import clear from "clear"
 
 import askForPropositionDetails from "./askForPropositionDetails"
 import secondaryOptionsMenu from "./secondaryOptionsMenu"
+import askForVariableAssignments from "./askForVariableAssignments"
 
-const mainLoop = async () => {
+const mainLoop = async (modifiedPropositionDetails?: {proposition: string, variables: string[], variableAssignments: {[key: string]: 1 | 0 | null}}) => {
   
   clear();
   printBanner()
 
-  const {proposition, variables, variableAssignments} = await askForPropositionDetails()
+  const { proposition, variables, variableAssignments } = modifiedPropositionDetails ? modifiedPropositionDetails : await askForPropositionDetails()
+
   // This is a quick hack to get ALL permutations regardless of assignments,
   // so that I can run filters against the complete table.
   // This will allow users to change filters without re-evaluating the equation.
@@ -23,15 +25,22 @@ const mainLoop = async () => {
   })
 
   const { originalProposition, evaluatedRows } = evaluateRawDetails(proposition, allVariablesAssignedNull)
+  clear()
+  printBanner()
   printTable(originalProposition, evaluatedRows, variableAssignments)
 
   const { selectedOption } = await secondaryOptionsMenu()
   switch(selectedOption) {
     case 'Modify variable assignments':
-      console.log("1")
+      const modifiedVariableAssignments = await askForVariableAssignments(variables)
+      mainLoop({
+        proposition,
+        variables,
+        variableAssignments: modifiedVariableAssignments
+      })
       break
     case 'Write a different proposition':
-      console.log("2")
+      mainLoop()
       break
     case 'Exit':
       console.log("Exiting")
