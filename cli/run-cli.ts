@@ -24,6 +24,22 @@ const mainLoop = async () => {
 
   const { originalProposition, evaluatedRows } = evaluateRawDetails(proposition, allVariablesAssignedNull)
   printTable(originalProposition, evaluatedRows, variableAssignments)
+
+  const { selectedOption } = await secondaryOptionsMenu()
+  switch(selectedOption) {
+    case 'Modify variable assignments':
+      console.log("1")
+      break
+    case 'Write a different proposition':
+      console.log("2")
+      break
+    case 'Exit':
+      console.log("Exiting")
+      process.exit(0)
+    default:
+      console.log("Unrecognised option selected")
+      process.exit(1)
+  }
 }
 
 mainLoop()
