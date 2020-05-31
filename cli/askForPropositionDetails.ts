@@ -60,5 +60,5 @@ export default async () => {
   }, [])
   const variableAssignments = await askForVariableAssignments(variables)
 
-  return { proposition, variableAssignments }
+  return { proposition, variables, variableAssignments }
 }

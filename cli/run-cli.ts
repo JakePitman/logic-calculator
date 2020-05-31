@@ -12,6 +12,15 @@ clear();
 printBanner()
 
 askForPropositionDetails().then(details => {
-  const { originalProposition, evaluatedRows } = evaluateRawDetails(details.proposition, details.variableAssignments)
-  printTable(originalProposition, evaluatedRows)
+
+  // This is a quick hack to get ALL permutations regardless of assignments,
+  // so that I can run filters against the complete table.
+  // This will allow users to change filters without re-evaluating the equation.
+  const allVariablesAssignedNull: {[key: string]: null} = {}
+  details.variables.forEach(variable => {
+    allVariablesAssignedNull[variable] = null
+  })
+
+  const { originalProposition, evaluatedRows } = evaluateRawDetails(details.proposition, allVariablesAssignedNull)
+  printTable(originalProposition, evaluatedRows, details.variableAssignments)
 })
