@@ -11,7 +11,7 @@ const isPermittedChar = (char: string) => {
 }
 
 const resolveBiconditionals = (splitProposition: string[]) => {
-  const result = []
+  const result: string[] = []
   splitProposition.forEach((char, i, arr) => {
     if (char === "<") {
       result.push("<>") 
@@ -24,17 +24,17 @@ const resolveBiconditionals = (splitProposition: string[]) => {
   return result
 }
 
-export const createRowObject = (proposition: string): RowObject => {
-  const propositionCopy = `(${proposition})`
+export const propositionStringToArray = (propositionString: string): string[] => {
+  const withExtraBracketPair = `(${propositionString})`
+  const filteredByPermittedChars = withExtraBracketPair.split("").filter(e => isPermittedChar(e))
+  return resolveBiconditionals(filteredByPermittedChars)
+}
 
-  const filteredByPermittedChars = propositionCopy.split("").filter(e => isPermittedChar(e))
-  const symbolsArray = resolveBiconditionals(filteredByPermittedChars)
-    
+export const createRowObject = (propositionArray: string[]): RowObject => {
   return ( 
     {
-      originalRow: symbolsArray,
-      workingRow: symbolsArray,
-      evaluatedRow: symbolsArray.map(e => null)
+      workingRow: propositionArray,
+      evaluatedRow: propositionArray.map(e => null)
     }
   )
 }

@@ -7,7 +7,6 @@ import {
 
 describe("evaluateVariablePermutation", () => {
   const rowObject = {
-    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     evaluatedRow: [null, null, null, null, null, null, null, null, null]
   }
@@ -25,39 +24,40 @@ describe("evaluateVariablePermutation", () => {
 })
 
 describe("generatePermutations", () => {
+  const variableAssignments: VariableAssignments = {z: 1, y: 0}
   describe("with one unassigned variable", () => {
     const unassignedVariables = ["b"]
-    it("returns both possibilities of unassigned variable", () => {
-      expect(generatePermutations(unassignedVariables)).toStrictEqual([
-        {b: 0},
-        {b: 1}
+    it("returns both possibilities of unassigned variable, with variableAssignments attached", () => {
+      expect(generatePermutations(unassignedVariables, variableAssignments)).toStrictEqual([
+        {b: 0, z: 1, y: 0},
+        {b: 1, z: 1, y: 0}
       ])
     })
   })
-  describe("with two unassigned variables", () => {
+  describe("with two unassigned variables, with variableAssignments attached", () => {
     const unassignedVariables = ["b", "c"]
     it("returns all 4 possible permutations", () => {
-      expect(generatePermutations(unassignedVariables)).toStrictEqual([
-        {b: 0, c: 0},
-        {b: 1, c: 0},
-        {b: 0, c: 1},
-        {b: 1, c: 1}
+      expect(generatePermutations(unassignedVariables, variableAssignments)).toStrictEqual([
+        {b: 0, c: 0, z: 1, y: 0},
+        {b: 1, c: 0, z: 1, y: 0},
+        {b: 0, c: 1, z: 1, y: 0},
+        {b: 1, c: 1, z: 1, y: 0}
       ])
     })
   }),
-  describe("with three unassigned variables", () => {
+  describe("with three unassigned variables, with variableAssignments attached", () => {
     const unassignedVariables = ["b", "c", "d"]
     const expected: VariableAssignments[] = [
-      {b: 0, c: 0, d: 0},
-      {b: 1, c: 0, d: 0},
-      {b: 0, c: 1, d: 0},
-      {b: 1, c: 1, d: 0},
-      {b: 0, c: 0, d: 1},
-      {b: 1, c: 0, d: 1},
-      {b: 0, c: 1, d: 1},
-      {b: 1, c: 1, d: 1},
+      {b: 0, c: 0, d: 0, z: 1, y: 0},
+      {b: 1, c: 0, d: 0, z: 1, y: 0},
+      {b: 0, c: 1, d: 0, z: 1, y: 0},
+      {b: 1, c: 1, d: 0, z: 1, y: 0},
+      {b: 0, c: 0, d: 1, z: 1, y: 0},
+      {b: 1, c: 0, d: 1, z: 1, y: 0},
+      {b: 0, c: 1, d: 1, z: 1, y: 0},
+      {b: 1, c: 1, d: 1, z: 1, y: 0},
     ]
-    const result = generatePermutations(unassignedVariables)
+    const result = generatePermutations(unassignedVariables, variableAssignments)
     it("returns all 8 possible permutations", () => {
       expect(result).toStrictEqual(expected)
     })
@@ -66,7 +66,6 @@ describe("generatePermutations", () => {
 
 describe("evaluateAllVariablePermutations", () => {
   const rowObject: RowObject = {
-    originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     workingRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
     evaluatedRow: [null, null, null, null, null, null, null, null, null]
   }
@@ -74,7 +73,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-1,b-1": {
       variableAssignments: { a: 1, b: 1 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 1, 1, 1, null, 1, 1, null]
       }
@@ -82,7 +80,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-0,b-1": {
       variableAssignments: { a: 0, b: 1 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 0, 1, 1, null, 1, 1, null]
       }
@@ -90,7 +87,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-1,b-0": {
       variableAssignments: { a: 1, b: 0 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 0, null, null],
         evaluatedRow: [null, null, 1, 1, 0, null, 0, 0, null]
       }
@@ -98,7 +94,6 @@ describe("evaluateAllVariablePermutations", () => {
     "a-0,b-0": {
       variableAssignments: { a: 0, b: 0 },
       rowObject: {
-        originalRow: ["(", "(", "a", "v", "b", ")", ">", "b", ")"],
         workingRow: [null, null, null, null, null, null, 1, null, null],
         evaluatedRow: [null, null, 0, 0, 0, null, 1, 0, null]
       }

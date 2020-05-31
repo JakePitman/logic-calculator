@@ -2,17 +2,17 @@ import { RowObject, VariableAssignments } from "../../sharedTypes"
 import { resolveVariableAssignments } from "./StringEvaluations"
 import { evaluateFullProposition } from "./LogicEvaluations"
 
-export const generatePermutations = (unassignedVariables: string[]): VariableAssignments[] => {
+export const generatePermutations = (unassignedVariables: string[], variableAssignments: VariableAssignments): VariableAssignments[] => {
   const AMOUNT_OF_VARIABLES = unassignedVariables.length;
   const result = []
 
   for (let i = 0; i < (1 << AMOUNT_OF_VARIABLES); i++) {
-    let permutation = {};
+    let permutation: VariableAssignments = {};
     for (let j = AMOUNT_OF_VARIABLES - 1; j >= 0; j--) {
       const truthValue = Boolean(i & (1 << j)) ? 1 : 0
       permutation[unassignedVariables[j]] = truthValue
     }
-    result.push(permutation)
+    result.push({ ...variableAssignments, ...permutation })
   }
   return(result)
 }
@@ -25,8 +25,8 @@ export const evaluateVariablePermutation = (rowObject: RowObject, variableAssign
 export const evaluateAllVariablePermutations = 
   (rowObject: RowObject, variableAssignments: VariableAssignments)
   : {variableAssignments: VariableAssignments, rowObject: RowObject}[] => {
-    const assignedVars = []
-    const unassignedVars = []
+    const assignedVars: string[] = []
+    const unassignedVars: string[] = []
     Object.keys(variableAssignments).forEach(variable => {
       if (variableAssignments[variable] === null) {
         unassignedVars.push(variable)
@@ -35,16 +35,9 @@ export const evaluateAllVariablePermutations =
       }
     })
 
-    //TODO: handle this in generatePermutations
-      // (pass in variableAssignments, and spread there instead)
-    //without variableAssignments
-    const permutations = generatePermutations(unassignedVars)
-    //with variableAssignments
-    const completePermutations = permutations.map(permutation => {
-      return({...variableAssignments, ...permutation })
-    })
+    const permutations = generatePermutations(unassignedVars, variableAssignments)
 
-    const result = completePermutations.map(permutation => {
+    const result = permutations.map(permutation => {
       return({
         variableAssignments: permutation,
         rowObject: evaluateVariablePermutation(rowObject, permutation)
