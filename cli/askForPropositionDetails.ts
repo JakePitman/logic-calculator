@@ -1,6 +1,5 @@
 import { permittedVars, permittedChars } from "../src/sharedTypes/PermittedChars"
 const inquirer = require('inquirer');
-const chalk = require("chalk")
 
 const askForProposition = () => {
   const questions = [
