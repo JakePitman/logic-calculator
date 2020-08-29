@@ -20,7 +20,7 @@ Given that many of the operators used in logical formulas are not available on a
 | Conjunction         | ∧ · &         | &             |
 | Disjunction         | ∨ ∥           | v             |
 | Material Implication| ⇒ → ⊃         | >             |
-| Material equivalence| ⇔ ≡ ↔         | <>            |
+| Material Equivalence| ⇔ ≡ ↔         | <>            |
 | Negation            | ¬ ˜ !         | ~             |
 
 ## Propositional Logic Calculator
