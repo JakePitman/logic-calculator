@@ -8,11 +8,7 @@ It is also possible to define parts of the model before evaluation, to restrict 
 
 ---
 
-Logic Calculator can be run in the browser by running a local server, or through the command line.  
-At the moment, there is only a propositional logic calculator, but there are plans to build a version capable of evaluating predicate logic.
-
----
-In any case, the user will need to input a syntactically valid logical proposition (be careful with your parentheses!).  
+The user will need to input a syntactically valid logical proposition (be careful with your parentheses!).  
 Given that many of the operators used in logical formulas are not available on a keyboard, I have mapped each of them to a specific keyboard character (or in the case of material equivalence, two characters), as seen below:
 
 | Name                | Operator      | Character(s)  |
